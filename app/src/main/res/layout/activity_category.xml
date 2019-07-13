@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppTheme"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/background_light"
+    android:orientation="vertical"
+    android:weightSum="10"
+    tools:context="com.restoran.CategoryActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_product"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="0.1"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar2"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_kombo"
+        android:paddingLeft="10dp"
+        android:textSize="12sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:onClick="btn_all"
+            android:background="@android:color/darker_gray"
+            android:text="Все" />
+
+        <Button
+            android:id="@+id/komb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:background="@android:color/darker_gray"
+            android:onClick="btn_kombClick"
+            android:text="Комб" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:background="@android:color/darker_gray"
+            android:onClick="btn_fastPrroducts"
+            android:text="Бис" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fragmetCategory"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints" />
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.01"
+        app:itemBackground="@color/colorPrimary"
+        app:itemIconTint="@drawable/item_color_state"
+        app:itemTextColor="@color/colorPrimaryDark"
+        app:menu="@menu/menu_bottom_navigation" />
+
+</LinearLayout>

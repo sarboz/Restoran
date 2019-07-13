@@ -1,0 +1,27 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view_outer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
+        card_view:cardBackgroundColor="@android:color/transparent">
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_category"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            />
+        <!--android:layout_marginTop="25dp"-->
+        <!--android:layout_marginBottom="25dp"-->
+    </android.support.v7.widget.CardView>
+
+</FrameLayout>
