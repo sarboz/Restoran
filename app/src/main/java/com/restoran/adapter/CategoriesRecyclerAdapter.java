@@ -4,8 +4,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +34,7 @@ public class CategoriesRecyclerAdapter extends RecyclerView.Adapter<CategoriesRe
         View item = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_category, viewGroup, false);
         pref = PreferenceManager.getDefaultSharedPreferences(viewGroup.getContext());
 
-        int h = Integer.parseInt(pref.getString("category_height", "500"));
+        int h = Integer.parseInt(pref.getString("category_height", "180"));
         item.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, h));
         return new Holder(item);
     }

@@ -2,7 +2,7 @@
 
     <EditTextPreference
         android:capitalize="words"
-        android:defaultValue="250"
+        android:defaultValue="180"
         android:inputType="number|numberDecimal"
         android:key="product_height"
         android:maxLines="1"
@@ -20,7 +20,7 @@
         android:title="@string/pref_title_add_friends_to_messages" />
 
     <ListPreference
-        android:defaultValue="2"
+        android:defaultValue="20"
         android:entries="@array/shrift"
         android:entryValues="@array/shrift"
         android:key="product_shrift"

@@ -15,7 +15,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-    private final static String BaseUrl = "http://192.168.1.3";
+    private final static String BaseUrl = "http://192.168.1.10";
 
     private static Gson gson = new GsonBuilder().setLenient().create();
 
@@ -28,8 +28,8 @@ public class RetrofitClient {
                 .build();
     }
 
-
     static Interceptor onlineInterceptor = new Interceptor() {
+        public  double d;
         @Override
         public okhttp3.Response intercept(Chain chain) throws IOException {
             okhttp3.Response response = chain.proceed(chain.request());
@@ -40,12 +40,25 @@ public class RetrofitClient {
                     .build();
         }
     };
-    private static Retrofit getCacheInstanse(Context ctx) {
+
+    static Interceptor CategoryOnlineInterceptor = new Interceptor() {
+        @Override
+        public okhttp3.Response intercept(Chain chain) throws IOException {
+            okhttp3.Response response = chain.proceed(chain.request());
+            int maxAge = 1024;
+            return response.newBuilder()
+                    .header("Cache-Control", "public, max-age=" + maxAge)
+                    .removeHeader("Pragma")
+                    .build();
+        }
+    };
+
+    private static Retrofit getCacheInstanse(Context ctx,Interceptor interceptor ) {
         int size = 10 * 1024 * 1024;
         Cache cache = new Cache(ctx.getCacheDir(), size);
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .cache(cache)
-                .addNetworkInterceptor(onlineInterceptor)
+                .addNetworkInterceptor(interceptor)
                 .build();
         return new Retrofit.Builder()
                 .baseUrl(BaseUrl)
@@ -61,7 +74,11 @@ public class RetrofitClient {
 
 
     public static Api getApiWithCache(Context c) {
-        return getCacheInstanse(c).create(Api.class);
+        return getCacheInstanse(c,onlineInterceptor).create(Api.class);
+    }
+
+    public static Api getApiWithCacheCategory(Context c) {
+        return getCacheInstanse(c,CategoryOnlineInterceptor).create(Api.class);
     }
 
 }

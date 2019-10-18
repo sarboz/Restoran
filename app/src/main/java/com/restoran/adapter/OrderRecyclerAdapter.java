@@ -1,12 +1,13 @@
 package com.restoran.adapter;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.news.restoran.R;
 import com.restoran.Models.Orders;
@@ -30,24 +31,43 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int i) {
         Orders.Order order = list.get(i);
-        if (order.getKombo().size() > 0 && order.getStatus().isEmpty()) {
-            String name = "";
-            for (Orders.Order item : order.getKombo()) {
-                name = name + " " + item.getName() + " x " + item.getKol() + ",";
-            }
-
-            order.setName(name);
-            holder.name.setText(name);
+        if (order.getKombo().size() > 0) {
+            holder.name.setText(order.getName());
             holder.kol.setText(String.valueOf(order.getKol()));
-            holder.price.setText(order.getPrice() + " смн");
+            holder.price.setText(order.getPrice());
+            holder.narh.setText("");
+
+            if (order.getPrint()==1){
+                LinearLayout l = (LinearLayout) holder.name.getParent();
+                l.setBackgroundResource(R.color.print);
+            }else if (order.getPrint()==0){
+                LinearLayout l = (LinearLayout) holder.name.getParent();
+                l.setBackgroundResource(R.color.colorWhite);
+            }
             return;
         }
 
         holder.name.setText(order.getName());
-        holder.price.setText(order.getPrice() + " смн");
+        holder.narh.setText(order.getNarh());
+        holder.price.setText(order.getPrice());
         holder.kol.setText(String.valueOf(order.getKol()));
         if (order.getStatus().equals("del"))
             holder.setVisible();
+        if (order.getVariant().equals("Да")){
+            LinearLayout l = (LinearLayout) holder.name.getParent();
+            l.setBackgroundResource(R.color.variant);
+        }else if (order.getVariant().equals("Нет")){
+            LinearLayout l = (LinearLayout) holder.name.getParent();
+            l.setBackgroundResource(R.color.colorWhite);
+        }
+
+        if (order.getPrint()==1){
+            LinearLayout l = (LinearLayout) holder.name.getParent();
+            l.setBackgroundResource(R.color.print);
+        }else if (order.getPrint()==0){
+            LinearLayout l = (LinearLayout) holder.name.getParent();
+            l.setBackgroundResource(R.color.colorWhite);
+        }
     }
 
 
@@ -57,7 +77,7 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
     }
 
     public class Holder extends RecyclerView.ViewHolder {
-        TextView price, name, kol;
+        TextView price, name, kol, narh;
         View v;
 
         public Holder(@NonNull View v) {
@@ -66,6 +86,7 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
             price = (TextView) v.findViewById(R.id.price);
             name = (TextView) v.findViewById(R.id.name);
             kol = (TextView) v.findViewById(R.id.miqdor);
+            narh = (TextView) v.findViewById(R.id.narh);
         }
 
         public void setVisible() {

@@ -9,15 +9,17 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.core.app.NavUtils;
 
 import com.news.restoran.R;
 
@@ -25,10 +27,7 @@ import java.util.List;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
-    /**
-     * A preference value change listener that updates the preference's summary
-     * to reflect its new value.
-     */
+
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
@@ -43,11 +42,36 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                 ? listPreference.getEntries()[index]
                                 : null);
 
-            }else {
+            } else if (preference instanceof RingtonePreference) {
+
+                if (TextUtils.isEmpty(stringValue)) {
+
+                    preference.setSummary(R.string.pref_ringtone_silent);
+
+                } else {
+                    Ringtone ringtone = RingtoneManager.getRingtone(
+                            preference.getContext(), Uri.parse(stringValue));
+
+                    if (ringtone == null) {
+
+                        preference.setSummary(R.string.summary_choose_ringtone);
+                    } else {
+
+                        String name = ringtone.getTitle(preference.getContext());
+                        preference.setSummary(name);
+                    }
+                }
+
+            } else if (preference instanceof EditTextPreference) {
+                if (preference.getKey().equals("key_gallery_name")) {
+                    preference.setSummary(stringValue);
+                }
+            } else {
                 preference.setSummary(stringValue);
             }
             return true;
         }
+
     };
 
     private static boolean isXLargeTablet(Context context) {
@@ -58,11 +82,19 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     private static void bindPreferenceSummaryToValue(Preference preference) {
 
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-
+        if (preference.getKey().equals("notifiAuto")) {
+            sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
+                    PreferenceManager
+                            .getDefaultSharedPreferences(preference.getContext())
+                            .getBoolean(preference.getKey(), false));
+            return;
+        }
         sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
                 PreferenceManager
                         .getDefaultSharedPreferences(preference.getContext())
                         .getString(preference.getKey(), ""));
+
+
     }
 
     @Override
@@ -77,6 +109,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
+
 
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
@@ -112,6 +145,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 || PodCategoryPreferenceFragment.class.getName().equals(fragmentName)
                 || ChastPreferenceFragment.class.getName().equals(fragmentName)
                 || ProductPreferenceFragment.class.getName().equals(fragmentName)
+                || RingtonePreferenceFragment.class.getName().equals(fragmentName)
                 || StolPreferenceFragment.class.getName().equals(fragmentName);
     }
 
@@ -152,8 +186,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_pod_category);
             setHasOptionsMenu(true);
-
-
             bindPreferenceSummaryToValue(findPreference("pod_category_height"));
             bindPreferenceSummaryToValue(findPreference("pod_count_in_line"));
             bindPreferenceSummaryToValue(findPreference("pod_category_shrift"));
@@ -177,7 +209,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_chast);
             setHasOptionsMenu(true);
-
 
             bindPreferenceSummaryToValue(findPreference("chast_height"));
             bindPreferenceSummaryToValue(findPreference("chast_count_in_line"));
@@ -204,7 +235,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_stol);
             setHasOptionsMenu(true);
 
-
             bindPreferenceSummaryToValue(findPreference("stol_height"));
             bindPreferenceSummaryToValue(findPreference("stol_count"));
             bindPreferenceSummaryToValue(findPreference("stol_shrift"));
@@ -228,8 +258,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_product);
             setHasOptionsMenu(true);
-
-
             bindPreferenceSummaryToValue(findPreference("product_height"));
             bindPreferenceSummaryToValue(findPreference("product_count"));
             bindPreferenceSummaryToValue(findPreference("product_shrift"));
@@ -245,4 +273,27 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class RingtonePreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_ringtone);
+            setHasOptionsMenu(true);
+            bindPreferenceSummaryToValue(findPreference("ringtone"));
+            bindPreferenceSummaryToValue(findPreference("notifiAuto"));
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
 }

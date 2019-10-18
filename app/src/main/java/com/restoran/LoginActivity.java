@@ -3,21 +3,21 @@ package com.restoran;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 
-import com.news.restoran.R;
+import com.google.android.material.snackbar.Snackbar;
+import com.news.restoran.*;
+import com.restoran.Interfase.Api;
 import com.restoran.Models.Login;
 import com.restoran.adapter.RetrofitClient;
-import com.restoran.Interfase.Api;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,8 +33,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        loginView = (AutoCompleteTextView) findViewById(R.id.login);
-        pass = (EditText) findViewById(R.id.password);
+        loginView = findViewById(R.id.login);
+        pass = findViewById(R.id.password);
         spref = PreferenceManager.getDefaultSharedPreferences(this);
         prefEditor = spref.edit();
         loginView.setText(spref.getString("login", ""));
@@ -46,10 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean Validate(String login, String pass) {
-        if (login.isEmpty() || pass.isEmpty() || login.length() < 3)
-            return false;
-        else
-            return true;
+        return !login.isEmpty() && !pass.isEmpty() && login.length() >= 3;
     }
 
     public void login_btn(View view) {
@@ -64,17 +61,16 @@ public class LoginActivity extends AppCompatActivity {
                     Login l = response.body();
                     if (l.getStatus().equals("success")) {
                         prefEditor.putString("login", loginView.getText().toString());
-                        prefEditor.putString("fio",l.getFio());
-                        prefEditor.putString("id",l.getMessage());
-
+                        prefEditor.putString("fio", l.getFio());
+                        prefEditor.putString("id", l.getMessage());
+                        prefEditor.putString("svoiZakazi", l.getSvoiZakazi());
+                        prefEditor.putBoolean("uroven", l.getUroven().equals("1"));
+                        prefEditor.putBoolean("vib", l.getVib().equals("1"));
                         prefEditor.commit();
-                        Toast.makeText(getApplicationContext(),l.getMessage(),Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(getApplication(), MainActivity.class));
                     } else if (l.getStatus().equals("error")) {
                         Toast.makeText(getApplication(), "error:" + l.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-
-
                 }
 
                 @Override
@@ -83,6 +79,5 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
         }
-
     }
 }

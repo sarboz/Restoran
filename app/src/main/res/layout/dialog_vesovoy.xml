@@ -4,13 +4,19 @@
     android:layout_height="match_parent">
 
     <EditText
-
-        android:layout_margin="10dp"
-        android:padding="10dp"
-        android:textSize="20sp"
         android:id="@+id/gramm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="number" />
+        android:layout_margin="10dp"
+        android:inputType="number"
+        android:focusable="true"
+        android:padding="10dp"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ok" />
+
 </LinearLayout>

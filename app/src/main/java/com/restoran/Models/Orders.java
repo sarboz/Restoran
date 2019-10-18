@@ -85,13 +85,42 @@ public class Orders {
         private String type;
         private int kol;
         private String idChast;
+        private String narh;
         private int gramm;
+        private int print;
+        private String variant;
+
         @SerializedName("kombo")
         @Expose
         private List<Order> kombo = new ArrayList<>();
         @SerializedName("status")
         @Expose
         private String status = "";
+
+        public String getVariant() {
+            return variant;
+        }
+
+        public void setVariant(String variant) {
+            this.variant = variant;
+        }
+
+        public int getPrint() {
+            return print;
+        }
+
+        public void setPrint(int print) {
+            this.print = print;
+        }
+
+
+        public String getNarh() {
+            return narh;
+        }
+
+        public void setNarh(String narh) {
+            this.narh = narh;
+        }
 
         public String getStatus() {
             return status;

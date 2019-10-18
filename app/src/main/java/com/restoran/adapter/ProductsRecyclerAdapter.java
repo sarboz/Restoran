@@ -2,8 +2,8 @@ package com.restoran.adapter;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +29,7 @@ public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecycl
         View item = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_product, viewGroup, false);
         pref = PreferenceManager.getDefaultSharedPreferences(viewGroup.getContext());
 
-        int h = Integer.parseInt(pref.getString("product_height", "500"));
+        int h = Integer.parseInt(pref.getString("product_height", "180"));
         item.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, h));
 
         return new Holder(item);

@@ -1,43 +1,1 @@
-package com.restoran.adapter;
-
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-
-import com.restoran.Fragments.ZalFragment;
-import com.restoran.Models.ZalStol;
-
-import java.util.List;
-
-
-public class ZalAdapter extends FragmentPagerAdapter {
-    List<ZalStol.Zal> listOfZal;
-    String id;
-
-    public ZalAdapter(FragmentManager fm, List<ZalStol.Zal> list, String id) {
-        super(fm);
-        listOfZal = list;
-        this.id=id;
-    }
-
-    @Nullable
-    @Override
-    public CharSequence getPageTitle(int position) {
-        ZalStol.Zal z = listOfZal.get(position);
-        z.getStol();
-        return z.getName();
-    }
-
-    @Override
-    public Fragment getItem(int position) {
-        ZalStol.Zal z = listOfZal.get(position);
-        return ZalFragment.newInstance(position + 1, z.getName(),z.getId(), z.getStol(), id);
-    }
-
-    @Override
-    public int getCount() {
-
-        return listOfZal.size();
-    }
-}
+package com.restoran.adapter;import androidx.annotation.Nullable;import androidx.fragment.app.Fragment;import androidx.fragment.app.FragmentManager;import androidx.fragment.app.FragmentPagerAdapter;import com.restoran.Fragments.ZalFragment;import com.restoran.Models.ZalStol;import java.util.ArrayList;import java.util.List;public class ZalAdapter extends FragmentPagerAdapter {    List<ZalStol.Zal> listOfZal=new ArrayList<>();    String id;    public ZalAdapter(FragmentManager fm, List<ZalStol.Zal> list, String id) {        super(fm);        listOfZal = list;        this.id=id;    }    @Nullable    @Override    public CharSequence getPageTitle(int position) {        ZalStol.Zal z = listOfZal.get(position);        z.getStol();        return z.getName();    }    @Override    public int getItemPosition(Object object) {        return POSITION_NONE;    }    @Override    public Fragment getItem(int position) {        ZalStol.Zal z = listOfZal.get(position);        return ZalFragment.newInstance(position, z.getName(),z.getId(), z.getStol(), id);    }    @Override    public int getCount() {        return listOfZal.size();    }}

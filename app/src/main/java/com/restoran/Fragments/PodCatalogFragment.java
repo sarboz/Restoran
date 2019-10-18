@@ -1,20 +1,20 @@
 package com.restoran.Fragments;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.preference.PreferenceManager;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.news.restoran.R;
-import com.restoran.Interfase.IProduct;
 import com.restoran.Interfase.PodCatalog;
 import com.restoran.Models.Catecories;
-import com.restoran.adapter.CategoriesRecyclerAdapter;
 import com.restoran.adapter.PodCategoryRecyclerAdapter;
 import com.restoran.adapter.RecyclerTouchListener;
 import com.restoran.adapter.RetrofitClient;
@@ -36,6 +36,7 @@ public class PodCatalogFragment extends Fragment implements Callback<Catecories>
     RecyclerView rv_pogcatalog;
     List<Catecories.Cat> catecories;
     static PodCatalog podCatalogClick;
+    SharedPreferences pref;
 
     public static PodCatalogFragment newInstance(String param1, PodCatalog add) {
         PodCatalogFragment fragment = new PodCatalogFragment();
@@ -57,7 +58,9 @@ public class PodCatalogFragment extends Fragment implements Callback<Catecories>
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_category_group, container, false);
         rv_pogcatalog = v.findViewById(R.id.rv_category);
-        rv_pogcatalog.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        pref= PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        rv_pogcatalog.setLayoutManager(new GridLayoutManager(getActivity(), Integer.parseInt(pref.getString("pod_count_in_line","2"))));
         String id = getArguments().getString(ARG_PARAM);
 
         Api api = RetrofitClient.getApiWithCache(getActivity());
@@ -78,7 +81,6 @@ public class PodCatalogFragment extends Fragment implements Callback<Catecories>
             @Override
             public void onClick(View view, int position) {
                 Catecories.Cat c = catecories.get(position);
-                Toast.makeText(getActivity(), c.getName(), Toast.LENGTH_SHORT).show();
                 podCatalogClick.OnPodCatCall(c.getId(),0);
             }
         }));
